@@ -12,12 +12,16 @@ const ENTRY =
 
 const MAX_CHARS = 200;
 
-if (ENTRY.length < 1 || ENTRY.length > MAX_CHARS) {
-  throw new Error(`Entry is ${ENTRY.length} chars, gate allows 1–${MAX_CHARS}`);
+function validate(entry: string): void {
+  if (entry.length < 1 || entry.length > MAX_CHARS) {
+    throw new Error(`Entry is ${entry.length} chars, gate allows 1–${MAX_CHARS}`);
+  }
+  if (entry.trim().length === 0 || entry.includes("\n")) {
+    throw new Error("Entry must be a single non-blank line");
+  }
 }
-if (ENTRY.trim().length === 0 || ENTRY.includes("\n")) {
-  throw new Error("Entry must be a single non-blank line");
-}
+
+validate(ENTRY);
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", ENTRY, "utf8");
